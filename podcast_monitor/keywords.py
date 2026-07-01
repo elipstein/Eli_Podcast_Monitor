@@ -72,17 +72,18 @@ LASHEVET_LAKACHAT_GUESTS = [
 ]
 
 # Guests of "מאחורי הצלחת עם גדי חן" (Behind the Plate with Gadi Chen) --
-# same treatment as the לשבת לקחת guest list above. The show ran 14
-# episodes total, some as two-parters; hand-seeded from web search this
-# only reliably covers episodes 1-7 (search stopped surfacing anything
-# past that despite several attempts) -- ask Eli for the rest if he
-# remembers them. Moshik Roth and Segev Moshe were also guests on לשבת
-# לקחת and are already in the list above, so they're not repeated here.
+# same treatment as the לשבת לקחת guest list above. Complete: Eli supplied
+# the full 14-episode list (episodes 1-10, several as two-parters). Moshik
+# Roth (ep. 1), Segev Moshe (ep. 4), Shahar Segal (ep. 7), and Oren Assido
+# (ep. 10) were also guests on לשבת לקחת and are already in the list above,
+# so they're not repeated here; Israel Aharoni (ep. 8, "אהרוני'ס special"
+# with the extended Aharoni family) is already in the base CHEF_NAMES list.
 ACHOREI_HATZLACHAT_GUESTS = [
     "ארז קומרובסקי",     # ep. 3: Erez Komarovsky (Hebrew form; English form already above)
     "עמית גרוס",         # ep. 2: Amit Gross (restaurant-industry attorney, not a chef)
     "ברנרדו בלחוביץ'",    # ep. 5: Bernardo Blachowitz (owner, קפה גן סיפור)
     "רז רהב",            # ep. 6 (parts א/ב): Raz Rahav (chef, OCD restaurant)
+    "רז אבידן",          # ep. 9: Raz Avidan (hospitality groups: קונסיירז', סימפוני, מוניציפל)
 ]
 
 # Other chefs/restaurateurs Eli specifically likes hearing interviews

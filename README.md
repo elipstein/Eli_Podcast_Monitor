@@ -53,8 +53,10 @@ restaurant-industry podcasts Eli already listens to in full: לשבת
 (host Gadi Chen). Per Eli, *any* past guest of either show counts as a
 chef he likes, so an episode naming one of them on **any other**
 podcast, in Hebrew or English, will flag under rule 1, 3, or 5 even
-without a separate cuisine-term match. Lists built from web search and
-not exhaustive — add names as new episodes/guests turn up. A natural
+without a separate cuisine-term match. `ACHOREI_HATZLACHAT_GUESTS` is
+complete (Eli supplied the full 14-episode list); `LASHEVET_LAKACHAT_GUESTS`
+was built from web search and covers roughly episodes 1-51, not
+exhaustive — add names as new episodes/guests turn up. A natural
 follow-up would be a small script that parses these shows' own RSS
 feeds (episode titles follow consistent "פרק N: ... - <guest>"
 patterns) to grow the lists automatically.
