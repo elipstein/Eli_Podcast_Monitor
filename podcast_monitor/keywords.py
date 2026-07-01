@@ -108,7 +108,9 @@ RULES = [
         id="chef_interview_regional_cuisine",
         description="Chef interview + Middle Eastern / Israeli cuisine",
         left={"chef interview"},
-        right_categories={Category.CUISINE},
+        # A cuisine term, or one of the named chefs (who are themselves
+        # Israeli/Levantine/Mizrahi chefs) standing in for that cuisine.
+        right_categories={Category.CUISINE, Category.CHEF},
     ),
     Rule(
         id="ingredient_deep_dive_levantine",

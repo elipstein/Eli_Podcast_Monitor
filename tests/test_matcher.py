@@ -47,6 +47,17 @@ def test_kitchen_talk_with_dish_keyword_flags():
     assert "kitchen_talk_relevant_keyword" in result.fired_rules
 
 
+def test_chef_interview_with_named_chef_but_no_cuisine_term_flags():
+    # The named-chef list exists precisely to identify chef interviews
+    # about this region, even when no separate cuisine-term phrase appears.
+    result = evaluate(
+        "A Chef Interview with Michael Solomonov",
+        "A chef interview about his restaurant Zahav and his family history.",
+    )
+    assert result.flagged
+    assert "chef_interview_regional_cuisine" in result.fired_rules
+
+
 def test_unrelated_episode_not_flagged():
     result = evaluate(
         "Our Favorite Pasta Sauces",
