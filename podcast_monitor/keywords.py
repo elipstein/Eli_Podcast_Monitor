@@ -1,8 +1,9 @@
 """Keyword and flagging-rule definitions for the podcast monitor.
 
 Most entries here come from the original project brief; the chef list
-has since grown with Eli's personal favorites (see LASHEVET_LAKACHAT_GUESTS
-and OTHER_FAVORITE_CHEFS below). Keep the four categories (chefs, cuisine
+has since grown with Eli's personal favorites (see
+LASHEVET_LAKACHAT_GUESTS, ACHOREI_HATZLACHAT_GUESTS, and
+OTHER_FAVORITE_CHEFS below). Keep the four categories (chefs, cuisine
 terms, ingredients/dishes, signals) and the five combination rules in
 sync with any future keyword additions.
 
@@ -66,6 +67,19 @@ LASHEVET_LAKACHAT_GUESTS = [
     "דוד טור",           # David Tur
     "רן שמואלי",         # Ran Shmueli
     "אבי ביטון",         # Avi Biton
+    "אפרת אנזל",         # Efrat Enzel (guest ep. 33, with Oren Luxenberg)
+    "אורן לוקסנבורג",     # Oren Luxenberg (guest ep. 33)
+]
+
+# Guests of "מאחורי הצלחת עם גדי חן" (Behind the Plate with Gadi Chen) --
+# same treatment as the לשבת לקחת guest list above. Hand-seeded from web
+# search (episodes 1-7ish), not exhaustive. Moshik Roth and Segev Moshe
+# were also guests on לשבת לקחת and are already in the list above, so
+# they're not repeated here.
+ACHOREI_HATZLACHAT_GUESTS = [
+    "ארז קומרובסקי",  # Erez Komarovsky (Hebrew form; English form already above)
+    "רז רהב",         # Raz Rahav (chef, OCD restaurant)
+    "עמית גרוס",      # Amit Gross (restaurant-industry attorney, not a chef)
 ]
 
 # Other chefs/restaurateurs Eli specifically likes hearing interviews
@@ -78,7 +92,7 @@ OTHER_FAVORITE_CHEFS = [
     "Danny Meyer",
 ]
 
-CHEF_NAMES = _flatten(CHEF_NAMES, LASHEVET_LAKACHAT_GUESTS, OTHER_FAVORITE_CHEFS)
+CHEF_NAMES = _flatten(CHEF_NAMES, LASHEVET_LAKACHAT_GUESTS, ACHOREI_HATZLACHAT_GUESTS, OTHER_FAVORITE_CHEFS)
 
 # Cuisine / region terms.
 CUISINE_TERMS = [

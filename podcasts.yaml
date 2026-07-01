@@ -14,18 +14,16 @@
 #
 # Add, remove, or replace entries freely -- this list is a starting
 # point, not an exhaustive "all podcasts" index (no such index exists).
+#
+# NOT monitored on purpose: לשבת לקחת, מדברים מהבטן, and מאחורי הצלחת
+# עם גדי חן. Eli already listens to every episode of these three, so
+# there's no point flagging their own episodes -- but their guest lists
+# are still valuable, so they've been hand-seeded into keywords.py as
+# LASHEVET_LAKACHAT_GUESTS and ACHOREI_HATZLACHAT_GUESTS. Any of those
+# guests showing up as an interviewee on one of the podcasts actually
+# listed below (or any future one) will still flag.
 
 podcasts:
-  - name: "לשבת לקחת"
-    feed_url: "https://anchor.fm/s/fd1c3740/podcast/rss"
-    apple_podcasts_url: "https://podcasts.apple.com/il/podcast/%D7%9C%D7%A9%D7%91%D7%AA-%D7%9C%D7%A7%D7%97%D7%AA/id1786847468"
-    note: "Eli's favorite: Hebrew restaurant-industry podcast (hosts Nadav Bornstein & Kfir Arbiv) interviewing Israeli chefs and restaurateurs. Its guest list seeds LASHEVET_LAKACHAT_GUESTS in keywords.py -- any of those chefs appearing on another show should also flag."
-
-  - name: "מדברים מהבטן"
-    feed_url: "https://feed.podbean.com/medabrimmehabeten/feed.xml"  # inferred from medabrimmehabeten.podbean.com; unverified
-    apple_podcasts_url: "https://podcasts.apple.com/il/podcast/%D7%9E%D7%93%D7%91%D7%A8%D7%99%D7%9D-%D7%9E%D7%94%D7%91%D7%98%D7%9F/id1652492552"
-    note: "Eli's favorite: Hebrew podcast (בית הפודיום network) on Israeli restaurant and food-culture trends, hosted by יהונתן כהן, עמית אהרנסון, and נטע סלונים."
-
   - name: "Israel Story"
     feed_url: "https://feeds.acast.com/public/shows/1353fdb5-6664-49dc-9858-fc781473a75f"
     apple_podcasts_url: "https://podcasts.apple.com/us/podcast/israel-story/id1048515651"
@@ -65,3 +63,21 @@ podcasts:
     feed_url: null  # TODO: resolve RSS feed
     apple_podcasts_url: "https://podcasts.apple.com/us/podcast/sabah-al-yasmine-ramblings-of-a-chef/id1505071391"
     note: "Chef Fadi Kattan's show on Palestinian food, memory, and diaspora cooking."
+
+  # Found via web search as "similar to לשבת לקחת / מדברים מהבטן" --
+  # Hebrew food/restaurant-industry shows Eli doesn't already listen to,
+  # so (unlike the three above) their own episodes should be flagged.
+  - name: "אנזל ולוקסי - לדבר זה לא משמין"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/%D7%90%D7%A0%D7%96%D7%9C-%D7%95%D7%9C%D7%95%D7%A7%D7%A1%D7%99-%D7%9C%D7%93%D7%91%D7%A8-%D7%96%D7%94-%D7%9C%D7%90-%D7%9E%D7%A9%D7%9E%D7%99%D7%9F/id1453506095"
+    note: "Weekly Hebrew food podcast hosted by Efrat Enzel & Oren Luxenberg (themselves former לשבת לקחת guests) -- recipes, restaurant-owner and farmer interviews, Israeli and global culinary trends."
+
+  - name: "Yuvi Yam | קולינריה בישראל"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/yuvi-yam-%D7%A7%D7%95%D7%9C%D7%99%D7%A0%D7%A8%D7%99%D7%94-%D7%91%D7%99%D7%A9%D7%A8%D7%90%D7%9C/id1618045737"
+    note: "Yuval Nachum's biweekly Hebrew podcast: interviews with up-and-coming Israeli chefs and culinary-world stories."
+
+  - name: "אוכל ישראל עם גיל חובב"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/ca/podcast/%D7%90%D7%95%D7%9B%D7%9C-%D7%99%D7%A9%D7%A8%D7%90%D7%9C-%D7%A2%D7%9D-%D7%92%D7%99%D7%9C-%D7%97%D7%95%D7%91%D7%91-ochel-israel-with-gil-hovav/id1470358302"
+    note: "Gil Hovav's Hebrew podcast: top Israeli restaurant recommendations, seasonal recipes, and culinary tips."

@@ -34,28 +34,36 @@ word-boundary regex, because Hebrew attaches prefixes like ה/ב/ל/מ/ו
 directly with no space (e.g. "החומוס" — *the* hummus — still needs to
 match the keyword "חומוס"); see `_contains` in `matcher.py`.
 
-`LASHEVET_LAKACHAT_GUESTS` in `keywords.py` is a hand-seeded list of
-guests from Eli's favorite Hebrew restaurant-industry podcast, לשבת
-לקחת (hosts Nadav Bornstein & Kfir Arbiv) — per Eli, *any* past guest
-of that show counts as a chef he likes, so an episode naming one of
-them on **any** podcast, in Hebrew or English, will flag under rule 1
-or 3 even without a separate cuisine-term match. The list (17 names,
-covering roughly episodes 1–51) was built from web search and is not
-exhaustive — add names as new episodes/guests turn up. A natural
-follow-up would be a small script that parses לשבת לקחת's own RSS feed
-(episode titles follow a consistent "פרק N: ... - <guest>" pattern)
-to grow this list automatically.
+`LASHEVET_LAKACHAT_GUESTS` and `ACHOREI_HATZLACHAT_GUESTS` in
+`keywords.py` are hand-seeded guest lists from two Hebrew
+restaurant-industry podcasts Eli already listens to in full: לשבת
+לקחת (hosts Nadav Bornstein & Kfir Arbiv) and מאחורי הצלחת עם גדי חן
+(host Gadi Chen). Per Eli, *any* past guest of either show counts as a
+chef he likes, so an episode naming one of them on **any other**
+podcast, in Hebrew or English, will flag under rule 1, 3, or 5 even
+without a separate cuisine-term match. Lists built from web search and
+not exhaustive — add names as new episodes/guests turn up. A natural
+follow-up would be a small script that parses these shows' own RSS
+feeds (episode titles follow consistent "פרק N: ... - <guest>"
+patterns) to grow the lists automatically.
 
 ## Podcasts monitored
 
 `podcasts.yaml` is a starting list of food/chef/Jewish-and-Middle-
-Eastern-food-culture shows, including Eli's two favorites — לשבת לקחת
-and מדברים מהבטן. **There is no "all podcasts" feed** — you tell it
-which shows to watch by adding `{name, feed_url}` entries. Some
-entries have `feed_url: null` because their RSS URL couldn't be
+Eastern-food-culture shows. **There is no "all podcasts" feed** — you
+tell it which shows to watch by adding `{name, feed_url}` entries.
+Some entries have `feed_url: null` because their RSS URL couldn't be
 confirmed from this dev environment (see note in the file) — resolve
 those via a podcast app's "copy RSS link" feature or a tool like
 https://rss.com/tools/find-my-feed/ before they'll be scanned.
+
+**Deliberately not in this list:** לשבת לקחת, מדברים מהבטן, and
+מאחורי הצלחת עם גדי חן. Eli listens to every episode of all three
+already, so flagging their own episodes would be noise — only their
+guest lists (above) feed the matcher. Three shows discovered via web
+search *as similar to those three* — אנזל ולוקסי, Yuvi Yam | קולינריה
+בישראל, and אוכל ישראל עם גיל חובב — were added to the monitored list
+instead, since Eli doesn't already listen to those.
 
 ## Usage
 

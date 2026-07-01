@@ -131,6 +131,17 @@ def test_personal_favorite_chef_flags_without_regional_content():
     assert "Danny Meyer" in {m.text for m in result2.matched_keywords}
 
 
+def test_achorei_hatzlachat_guest_flags_on_any_podcast():
+    # Same treatment as the לשבת לקחת guests: Raz Rahav was a guest on
+    # מאחורי הצלחת עם גדי חן, so an interview with him anywhere should flag.
+    result = evaluate(
+        "ראיון עם השף רז רהב",
+        "שיחה עם רז רהב, השף של מסעדת OCD, על הקריירה שלו.",
+    )
+    assert result.flagged
+    assert "רז רהב" in {m.text for m in result.matched_keywords}
+
+
 def test_hebrew_unrelated_episode_not_flagged():
     result = evaluate(
         "פרק 91: פנינו לאן?",
