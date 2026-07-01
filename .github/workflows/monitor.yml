@@ -1,0 +1,53 @@
+name: Podcast Monitor
+
+on:
+  schedule:
+    # Every Monday at 13:00 UTC
+    - cron: "0 13 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run monitor
+        run: |
+          mkdir -p reports
+          python -m podcast_monitor.cli \
+            --config podcasts.yaml \
+            --days 14 \
+            --format markdown \
+            --output "reports/$(date -u +%Y-%m-%d).md"
+
+      - name: Commit report
+        run: |
+          git config user.name "podcast-monitor-bot"
+          git config user.email "actions@github.com"
+          git add reports/
+          git diff --cached --quiet || git commit -m "Weekly podcast scan report"
+          git push
+
+      - name: Open issue if episodes were flagged
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPORT="reports/$(date -u +%Y-%m-%d).md"
+          if ! grep -q "^No episodes matched" "$REPORT"; then
+            gh issue create \
+              --title "Podcast scan: flagged episodes for $(date -u +%Y-%m-%d)" \
+              --body-file "$REPORT" \
+              --label "podcast-scan"
+          fi

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Sample Food Podcast</title>
+  <item>
+    <title>Chef Interview: Michael Solomonov on Zahav and Israeli Cuisine</title>
+    <description>A chef interview with Michael Solomonov about building Zahav's menu and his approach to Israeli cuisine, tahini, and hummus.</description>
+    <pubDate>Mon, 15 Jun 2026 10:00:00 GMT</pubDate>
+    <link>https://example.com/ep1</link>
+  </item>
+  <item>
+    <title>The History of Sumac and Za'atar</title>
+    <description>A deep dive into Levantine ingredients: sumac and za'atar, tracing their roots across the Levantine region.</description>
+    <pubDate>Mon, 08 Jun 2026 10:00:00 GMT</pubDate>
+    <link>https://example.com/ep2</link>
+  </item>
+  <item>
+    <title>Our Favorite Pasta Sauces</title>
+    <description>A casual chat about weeknight pasta sauces, no chefs or regional cuisine here.</description>
+    <pubDate>Mon, 01 Jun 2026 10:00:00 GMT</pubDate>
+    <link>https://example.com/ep3</link>
+  </item>
+  <item>
+    <title>Restaurant Opening Diaries: A New Mizrahi Spot</title>
+    <description>Behind-the-scenes kitchen culture as a new restaurant opening brings Mizrahi flavors to the neighborhood.</description>
+    <pubDate>Mon, 22 Jun 2026 10:00:00 GMT</pubDate>
+    <link>https://example.com/ep4</link>
+  </item>
+  <item>
+    <title>Diaspora Cooking: Palestinian Food Anthropology</title>
+    <description>An exploration of diaspora cooking and food anthropology among Palestinian food traditions and jachnun.</description>
+    <pubDate>Mon, 29 Jun 2026 10:00:00 GMT</pubDate>
+    <link>https://example.com/ep5</link>
+  </item>
+</channel>
+</rss>

@@ -1,0 +1,57 @@
+# Podcasts to monitor for Middle Eastern / Israeli cuisine and
+# behind-the-scenes chef content.
+#
+# IMPORTANT: This sandboxed dev session cannot reach arbitrary external
+# hosts (outbound network is restricted to an allowlist that does not
+# include podcast CDNs), so none of these RSS feed URLs could be
+# fetch-verified from inside this session. `feed_url` values below came
+# from web search citations, not a live fetch -- confirm each one
+# resolves to real XML before relying on it (run the CLI once, or paste
+# the URL in a browser / podcast app). Apple Podcasts links are included
+# for every show so you can re-derive the feed URL if one is stale
+# (most podcast apps have a "copy RSS link" option, or use a lookup
+# tool such as https://rss.com/tools/find-my-feed/).
+#
+# Add, remove, or replace entries freely -- this list is a starting
+# point, not an exhaustive "all podcasts" index (no such index exists).
+
+podcasts:
+  - name: "Israel Story"
+    feed_url: "https://feeds.acast.com/public/shows/1353fdb5-6664-49dc-9858-fc781473a75f"
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/israel-story/id1048515651"
+    note: "Storytelling podcast about Israel; regularly covers food, chefs, and culinary culture."
+
+  - name: "Point of Origin"
+    feed_url: "https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/65c39896-dfae-49a0-b0c8-ae2701747cbb/156f8611-c088-415b-98e8-ae2701747ccd/podcast.rss"
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/point-of-origin/id1475800695"
+    note: "Whetstone Magazine's food-and-culture show hosted by Stephen Satterfield; covers global cuisine history, including the region."
+
+  - name: "Schmaltzy"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/schmaltzy/id1529032928"
+    note: "Jewish Food Society's storytelling podcast on Jewish/Levantine food and identity."
+
+  - name: "Radio Cherry Bombe"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/radio-cherry-bombe/id876424161"
+    note: "Chef and restaurant-industry interview show; has featured Einat Admony, Reem Assil, Genevieve Gergis, and others."
+
+  - name: "Salt & Spine"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/salt-spine/id1382453932"
+    note: "Cookbook-author interview show; frequently covers Levantine and diaspora cookbooks."
+
+  - name: "The Splendid Table"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/the-splendid-table/id303115369"
+    note: "Long-running food culture show; occasional chef interviews and regional cuisine deep dives."
+
+  - name: "Milk Street Radio"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/milk-street-radio/id1073229584"
+    note: "Global cuisine and ingredient-history show; has covered Levantine ingredients and cooks."
+
+  - name: "Sabah Al Yasmine - Ramblings of a Chef"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/sabah-al-yasmine-ramblings-of-a-chef/id1505071391"
+    note: "Chef Fadi Kattan's show on Palestinian food, memory, and diaspora cooking."
