@@ -1,8 +1,10 @@
 """Keyword and flagging-rule definitions for the podcast monitor.
 
-Every entry here comes straight from the project brief. Keep the four
-categories (chefs, cuisine terms, ingredients/dishes, signals) and the
-five combination rules in sync with any future keyword additions.
+Most entries here come from the original project brief; the chef list
+has since grown with Eli's personal favorites (see LASHEVET_LAKACHAT_GUESTS
+and OTHER_FAVORITE_CHEFS below). Keep the four categories (chefs, cuisine
+terms, ingredients/dishes, signals) and the five combination rules in
+sync with any future keyword additions.
 
 Hebrew support: Eli listens to Hebrew-language shows too, so every
 concept below is stored as a list of surface forms in whatever
@@ -66,7 +68,17 @@ LASHEVET_LAKACHAT_GUESTS = [
     "אבי ביטון",         # Avi Biton
 ]
 
-CHEF_NAMES = _flatten(CHEF_NAMES, LASHEVET_LAKACHAT_GUESTS)
+# Other chefs/restaurateurs Eli specifically likes hearing interviews
+# with, regardless of region/cuisine -- these fire the same rules as the
+# regional chef names (e.g. rule 1: chef-interview signal + this name is
+# enough to flag, even with no Levantine/Israeli content in the episode).
+# Michael Solomonov is already in CHEF_NAMES above.
+OTHER_FAVORITE_CHEFS = [
+    "Will Guidara",
+    "Danny Meyer",
+]
+
+CHEF_NAMES = _flatten(CHEF_NAMES, LASHEVET_LAKACHAT_GUESTS, OTHER_FAVORITE_CHEFS)
 
 # Cuisine / region terms.
 CUISINE_TERMS = [

@@ -111,6 +111,26 @@ def test_hebrew_ingredient_with_prefix_still_matches():
     assert "לבנטיני" in matched
 
 
+def test_personal_favorite_chef_flags_without_regional_content():
+    # Will Guidara / Danny Meyer aren't Levantine chefs, but Eli asked for
+    # interviews with them specifically -- a chef-interview signal plus
+    # their name should flag on its own, same as the regional chef names.
+    result = evaluate(
+        "Chef Interview: Will Guidara on Unreasonable Hospitality",
+        "A chef interview with restaurateur Will Guidara about his career.",
+    )
+    assert result.flagged
+    assert "chef_interview_regional_cuisine" in result.fired_rules
+    assert "Will Guidara" in {m.text for m in result.matched_keywords}
+
+    result2 = evaluate(
+        "A Conversation with Danny Meyer",
+        "Chef interview with restaurateur Danny Meyer of Union Square Hospitality Group.",
+    )
+    assert result2.flagged
+    assert "Danny Meyer" in {m.text for m in result2.matched_keywords}
+
+
 def test_hebrew_unrelated_episode_not_flagged():
     result = evaluate(
         "פרק 91: פנינו לאן?",
