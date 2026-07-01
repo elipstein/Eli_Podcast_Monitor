@@ -74,3 +74,46 @@ def test_ingredient_mention_alone_without_cuisine_context_not_flagged():
         "We tried a new store-bought hummus brand this week.",
     )
     assert not result.flagged
+
+
+def test_hebrew_chef_interview_flags():
+    result = evaluate(
+        "פרק 13: השף ישראל אהרוני",
+        "ראיון שף עם ישראל אהרוני על המטבח הישראלי ופתיחת מסעדה חדשה.",
+    )
+    assert result.flagged
+    assert "chef_interview_regional_cuisine" in result.fired_rules
+    assert "ישראל אהרוני" in {m.text for m in result.matched_keywords}
+
+
+def test_hebrew_lashevet_lakachat_guest_flags_on_any_podcast():
+    # Eli said: anyone who's ever been a guest on לשבת לקחת counts,
+    # even on a totally different show and with no separate cuisine term.
+    result = evaluate(
+        "ראיון שף עם חיים כהן",
+        "שיחה על הקריירה של השף חיים כהן במסעדות כרם ודיקסי.",
+    )
+    assert result.flagged
+    assert "חיים כהן" in {m.text for m in result.matched_keywords}
+
+
+def test_hebrew_ingredient_with_prefix_still_matches():
+    # Hebrew attaches prefixes (ה/ב/ל/מ) with no space, so "החומוס" must
+    # still match the "חומוס" (hummus) keyword -- a plain \b-word-boundary
+    # match would miss this.
+    result = evaluate(
+        "הסיפור מאחורי החומוס",
+        "אנתרופולוגיה של האוכל: מאיפה הגיע החומוס וטחינה למטבח הלבנטיני.",
+    )
+    assert result.flagged
+    matched = {m.text for m in result.matched_keywords}
+    assert "חומוס" in matched
+    assert "לבנטיני" in matched
+
+
+def test_hebrew_unrelated_episode_not_flagged():
+    result = evaluate(
+        "פרק 91: פנינו לאן?",
+        "יהונתן ועמית מדברים על תוכניות לחופשה הקרובה, בלי קשר לאוכל מהאזור.",
+    )
+    assert not result.flagged

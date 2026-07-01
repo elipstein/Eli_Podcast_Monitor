@@ -6,9 +6,9 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from .keywords import ALL_KEYWORDS, Category, RULES, CHEF_NAMES, INGREDIENT_TERMS
+from .keywords import ALL_KEYWORDS, Category, RULES
 
-_WORD_BOUNDARY_SAFE = re.compile(r"[a-z0-9']+")
+_HEBREW_RANGE = re.compile(r"[֐-׿]")
 
 
 def _normalize(text: str) -> str:
@@ -17,10 +17,14 @@ def _normalize(text: str) -> str:
 
 def _contains(haystack: str, needle: str) -> bool:
     """Substring match on normalized text. Multi-word keywords (chef
-    names, phrases) are matched as plain substrings; single tokens use
-    word boundaries to avoid matching inside unrelated words."""
+    names, phrases) are matched as plain substrings; single English
+    tokens use word boundaries to avoid matching inside unrelated
+    words. Hebrew tokens always use plain substring matching, since
+    Hebrew attaches prefixes (ה/ב/ל/מ/ו...) directly with no space, so
+    a \\b boundary would miss "החומוס" ("the hummus") when matching
+    "חומוס"."""
     needle = needle.lower()
-    if " " in needle or "'" in needle:
+    if " " in needle or "'" in needle or _HEBREW_RANGE.search(needle):
         return needle in haystack
     return re.search(rf"\b{re.escape(needle)}\b", haystack) is not None
 

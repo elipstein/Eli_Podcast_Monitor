@@ -122,12 +122,12 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 _CARD_TEMPLATE = """<div class="card">
-  <h2>{title}</h2>
-  <p class="meta"><strong>Podcast:</strong> {podcast}</p>
+  <h2 dir="auto">{title}</h2>
+  <p class="meta" dir="auto"><strong>Podcast:</strong> {podcast}</p>
   <p class="meta"><strong>Release date:</strong> {date}</p>
   <p class="meta"><strong>Confidence:</strong> <span class="badge {conf_class}">{confidence}</span></p>
-  <p class="meta"><strong>Reason:</strong> {reason}</p>
-  <p class="meta keywords"><strong>Matched keywords:</strong><br>{keywords}</p>
+  <p class="meta" dir="auto"><strong>Reason:</strong> {reason}</p>
+  <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br>{keywords}</p>
   {link}
 </div>
 """
