@@ -61,6 +61,41 @@ follow-up would be a small script that parses these shows' own RSS
 feeds (episode titles follow consistent "פרק N: ... - <guest>"
 patterns) to grow the lists automatically.
 
+## Taste-profile pipeline (LLM judgment, not keywords)
+
+`podcast_monitor/profile_cli.py` is a second, separate pipeline for
+everything in [`PROFILE.md`](PROFILE.md) that isn't Middle Eastern
+cuisine — general shows Eli's taste implies he'd like. There's no
+keyword combination that captures "would Eli like this episode of
+Acquired," so instead of `matcher.py`'s fixed rules, `profile_judge.py`
+sends each episode's title + description to Claude (`claude-opus-4-8`)
+alongside the full text of `PROFILE.md` and asks for a structured
+verdict — `fits: bool`, `confidence`, `reasoning` — via
+`client.messages.parse(..., output_format=EpisodeJudgment)` (a Pydantic
+model). It's deliberately selective: most episodes of a show Eli
+already likes still shouldn't be flagged, only the unusually good,
+timely, or distinctive ones.
+
+`profile_podcasts.yaml` is the starter show list, one per theme from
+`PROFILE.md`'s recommendations (Huberman Lab, The Prof G Pod, This
+American Life, Wondering Jews with Mijal and Noam) — add more from
+`PROFILE.md` or elsewhere.
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+python -m podcast_monitor.profile_cli --config profile_podcasts.yaml --days 14
+```
+
+**This requires an `ANTHROPIC_API_KEY`, which this dev sandbox does not
+have** — the pipeline's surrounding logic (config loading, date
+filtering, report rendering) is unit-tested with a mocked Anthropic
+client (`tests/test_profile.py`), but the actual API call has not been
+exercised against the live API from this session. For the automated
+version, add `ANTHROPIC_API_KEY` as a repo secret (**Settings → Secrets
+and variables → Actions**) — `.github/workflows/profile_monitor.yml`
+checks for it and skips with a warning if it's missing, otherwise runs
+weekly and updates `docs/profile.html`.
+
 ## Podcasts monitored
 
 `podcasts.yaml` is a starting list of food/chef/Jewish-and-Middle-
@@ -105,30 +140,43 @@ release date, matched keywords, reason for flag, confidence level.
 
 ## Automated weekly scans
 
-`.github/workflows/monitor.yml` runs the scan every Monday (and on
-manual dispatch), commits the report to `reports/`, and opens a GitHub
-issue listing flagged episodes. It runs on a GitHub-hosted runner with
-normal internet access, so it can reach podcast RSS hosts that this
-dev sandbox could not.
+Two independent GitHub Actions workflows, offset by 15 minutes so they
+don't race on `docs/`:
+
+- `.github/workflows/monitor.yml` — the cuisine keyword-rule scan.
+  Runs every Monday 13:00 UTC (and on manual dispatch), commits the
+  report to `reports/`, updates `docs/index.html`, and opens a GitHub
+  issue listing flagged episodes.
+- `.github/workflows/profile_monitor.yml` — the taste-profile LLM scan.
+  Runs every Monday 13:15 UTC, same behavior, updates `docs/profile.html`.
+  Requires the `ANTHROPIC_API_KEY` repo secret (see above) — skips with
+  a warning if it's not set.
+
+Both run on GitHub-hosted runners with normal internet access, so they
+can reach podcast RSS hosts that this dev sandbox could not.
 
 ## Website
 
-`docs/index.html` is a static HTML report (built with `--format html`)
-meant to be served by GitHub Pages at
-**https://elipstein.github.io/Eli_Podcast_Monitor/**. It currently
-holds a manually-researched snapshot of matching episodes (dates
-marked "Unknown" couldn't be confirmed) — the weekly scan will replace
-it with live RSS results once `podcasts.yaml` has real feed URLs.
+`docs/index.html` (cuisine matches) and `docs/profile.html`
+(taste-profile picks) are static HTML reports, cross-linked by a nav
+bar, meant to be served by GitHub Pages at
+**https://elipstein.github.io/Eli_Podcast_Monitor/**. `index.html`
+currently holds a manually-researched snapshot of matching episodes
+(dates marked "Unknown" couldn't be confirmed); `profile.html` is an
+honest empty placeholder, since generating it for real requires the
+`ANTHROPIC_API_KEY` this sandbox doesn't have. The weekly scans replace
+both with live results once feeds and the API key are in place.
 
 **One-time setup (do this in the GitHub UI, not something this repo
 can do on its own):** go to the repo's **Settings → Pages**, and under
 "Build and deployment" set **Source: GitHub Actions**. After that,
 `.github/workflows/pages.yml` deploys `docs/` automatically on every
 push and the site goes live at the URL above within a minute or two.
-Regenerate the page locally with:
+Regenerate the pages locally with:
 
 ```bash
 python -m podcast_monitor.cli --config podcasts.yaml --days 60 --format html --output docs/index.html
+python -m podcast_monitor.profile_cli --config profile_podcasts.yaml --days 60 --format html --output docs/profile.html
 ```
 
 ## Tests
@@ -139,15 +187,24 @@ pytest
 ```
 
 Tests run entirely offline against a local RSS fixture
-(`tests/fixtures/sample_feed.xml`) — no network required.
+(`tests/fixtures/sample_feed.xml`) — no network required. The
+taste-profile pipeline's tests mock the Anthropic client
+(`tests/test_profile.py`), so they don't need `ANTHROPIC_API_KEY` either.
 
-## Known limitation
+## Known limitations
 
 This tool was built and tested inside a sandboxed session whose
 outbound network access is restricted to an allowlist (pypi, npm,
 github, anthropic) and does not include podcast hosting CDNs
 (Megaphone, Acast, Omny, etc.). The matching engine and CLI are fully
-tested against local fixtures, but no live feed in `podcasts.yaml` was
-fetch-verified from this session — do that once from an unrestricted
-network (your machine, or the GitHub Actions workflow) before trusting
-the configured `feed_url` values.
+tested against local fixtures, but no live feed in `podcasts.yaml` or
+`profile_podcasts.yaml` was fetch-verified from this session — do that
+once from an unrestricted network (your machine, or the GitHub Actions
+workflow) before trusting the configured `feed_url` values.
+
+Separately, this session has no `ANTHROPIC_API_KEY`, so
+`profile_cli.py`'s actual call to Claude has never run for real —
+only its surrounding logic, via a mocked client. Run it once with a
+real key (locally, or via the `profile_monitor.yml` workflow once the
+secret is added) to confirm the live behavior matches what the tests
+predict.

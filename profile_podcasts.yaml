@@ -1,0 +1,36 @@
+# Podcasts for the broader-taste-profile pipeline (podcast_monitor/profile_cli.py).
+#
+# Unlike podcasts.yaml (strict Middle Eastern / Israeli cuisine keyword
+# rules), episodes here are judged by Claude against PROFILE.md in free
+# text -- there's no keyword combination that captures "would Eli like
+# this episode of Acquired." Requires ANTHROPIC_API_KEY as a repo secret
+# for the GitHub Actions workflow (.github/workflows/profile_monitor.yml)
+# to run; add it under Settings -> Secrets and variables -> Actions.
+#
+# Same caveat as podcasts.yaml: these feed_url values came from web
+# search, not a live fetch-verify from this dev sandbox (see README.md's
+# "Known limitation" section) -- confirm they resolve before relying on
+# them. This is a starter list built from PROFILE.md's recommendations,
+# one representative show per theme -- add more from PROFILE.md or
+# elsewhere as you like.
+
+podcasts:
+  - name: "Huberman Lab"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/huberman-lab/id1545953110"
+    note: "Long-form science/health deep dives -- same style as Rhonda Patrick's FoundMyFitness."
+
+  - name: "The Prof G Pod with Scott Galloway"
+    feed_url: "https://feeds.megaphone.fm/WWO6655869236"
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/the-prof-g-pod-with-scott-galloway/id1498802610"
+    note: "Scott Galloway solo -- same voice as half of Pivot, opinionated business/tech takes."
+
+  - name: "This American Life"
+    feed_url: "https://www.thisamericanlife.org/podcast/rss.xml"
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/this-american-life/id201671138"
+    note: "The narrative-storytelling format The Moth borrows from."
+
+  - name: "Wondering Jews with Mijal and Noam"
+    feed_url: "https://feeds.megaphone.fm/wondering-jews"
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/wondering-jews-with-mijal-and-noam/id1727260478"
+    note: "Jewish identity, culture, and humor -- already turned up organically in the food research (a real chef-interview episode with Michael Solomonov)."

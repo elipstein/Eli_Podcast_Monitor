@@ -6,182 +6,277 @@
 <title>Eli Podcast Monitor</title>
 <style>
   :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    max-width: 780px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 2.5rem 1.25rem 4rem;
-    line-height: 1.5;
+    padding: 3rem 1.5rem 4rem;
+    line-height: 1.55;
     color: #1c1c1e;
     background: #fafafa;
+    -webkit-font-smoothing: antialiased;
   }
-  header { margin-bottom: 2rem; }
-  h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
-  .subtitle { color: #666; font-size: 0.95rem; }
+  header { margin-bottom: 2.25rem; }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a6fd8;
+    margin: 0 0 0.4rem;
+  }
+  h1 { font-size: 1.75rem; margin: 0 0 0.4rem; letter-spacing: -0.01em; }
+  .subtitle { color: #666; font-size: 0.95rem; margin: 0.2rem 0; }
+  .meta-line { color: #999; font-size: 0.82rem; margin-top: 0.6rem; }
+  nav.site-nav { margin-top: 1rem; font-size: 0.85rem; }
+  nav.site-nav a {
+    display: inline-block;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    margin-right: 0.5rem;
+    text-decoration: none;
+    color: #444;
+  }
+  nav.site-nav a.active { background: #1c1c1e; color: #fff; border-color: #1c1c1e; }
   .card {
     background: #fff;
-    border: 1px solid #e3e3e3;
+    border: 1px solid #e7e7e7;
+    border-left: 4px solid #ddd;
     border-radius: 10px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.1rem;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
   }
-  .card h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
-  .meta { font-size: 0.9rem; color: #444; margin: 0.15rem 0; }
-  .meta strong { color: #111; }
+  .card.conf-high { border-left-color: #2f9e52; }
+  .card.conf-medium { border-left-color: #d1980a; }
+  .card.conf-low { border-left-color: #999; }
+  .card-head { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.6rem; }
+  .avatar {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #efe9fc;
+    color: #6a4fc2;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.1rem;
+  }
+  .card h2 { font-size: 1.08rem; margin: 0 0 0.15rem; line-height: 1.35; }
+  .podcast-name { font-size: 0.82rem; color: #888; }
+  .meta { font-size: 0.88rem; color: #444; margin: 0.3rem 0; }
+  .meta strong { color: #111; font-weight: 600; }
   .badge {
     display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.15rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.6rem;
     border-radius: 999px;
-    margin-left: 0.4rem;
+    margin-left: 0.35rem;
+    letter-spacing: 0.02em;
   }
-  .badge.high { background: #dff5e1; color: #1a7431; }
-  .badge.medium { background: #fff3d6; color: #8a5a00; }
+  .badge.high { background: #e2f6e7; color: #1a7431; }
+  .badge.medium { background: #fdf1d6; color: #8a5a00; }
   .badge.low { background: #eee; color: #555; }
   .keywords span {
     display: inline-block;
     background: #f1eefc;
     color: #4b3aa4;
-    font-size: 0.8rem;
-    padding: 0.1rem 0.5rem;
+    font-size: 0.78rem;
+    padding: 0.12rem 0.55rem;
     border-radius: 6px;
-    margin: 0.15rem 0.25rem 0 0;
+    margin: 0.2rem 0.3rem 0 0;
   }
-  a { color: #4b3aa4; }
-  footer { margin-top: 2.5rem; font-size: 0.8rem; color: #888; }
+  a { color: #6a4fc2; }
+  .listen-link { font-size: 0.85rem; font-weight: 600; }
+  footer { margin-top: 2.5rem; font-size: 0.8rem; color: #888; line-height: 1.6; }
+  footer p { margin: 0 0 0.6rem; }
   .empty { color: #666; font-style: italic; }
   @media (prefers-color-scheme: dark) {
     body { background: #121212; color: #eaeaea; }
     .card { background: #1c1c1e; border-color: #2e2e2e; }
     .card h2 { color: #fff; }
+    .podcast-name { color: #999; }
     .meta { color: #bbb; }
     .meta strong { color: #f2f2f2; }
     .keywords span { background: #2a2440; color: #c9bdf5; }
+    .avatar { background: #2a2440; color: #c9bdf5; }
+    nav.site-nav a { border-color: #3a3a3a; color: #ccc; }
+    nav.site-nav a.active { background: #eaeaea; color: #121212; border-color: #eaeaea; }
     footer { color: #888; }
   }
 </style>
 </head>
 <body>
 <header>
+  <p class="eyebrow">Podcast monitor</p>
   <h1>Eli Podcast Monitor</h1>
   <p class="subtitle">Middle Eastern / Israeli cuisine &amp; behind-the-scenes chef content, flagged from monitored podcasts.</p>
-  <p class="subtitle">Last updated: 2026-07-01 00:00 UTC &middot; 11 flagged episode(s)</p>
+  <p class="meta-line">Last updated: 2026-07-01 00:00 UTC &middot; 11 flagged episode(s)</p>
+  <nav class="site-nav"><a href="index.html" class="active">Cuisine matches</a><a href="profile.html">Taste-profile picks</a></nav>
 </header>
-<div class="card">
-  <h2 dir="auto">Episode 492: Unreasonable Hospitality with Will Guidara</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Capital Allocators with Ted Seides</p>
-  <p class="meta"><strong>Release date:</strong> 2026-03-16</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">C</div>
+    <div>
+      <h2 dir="auto">Episode 492: Unreasonable Hospitality with Will Guidara</h2>
+      <div class="podcast-name" dir="auto">Capital Allocators with Ted Seides</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> 2026-03-16 &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Will Guidara</span><span>chef interview</span></p>
-  <p class="meta"><a href="https://www.capitalallocators.com/podcast/unreasonable-hospitality/">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://www.capitalallocators.com/podcast/unreasonable-hospitality/">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Episode 115: Danny Meyer: Hospitality and Humanity</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> The Knowledge Project</p>
-  <p class="meta"><strong>Release date:</strong> 2026-02-25</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">T</div>
+    <div>
+      <h2 dir="auto">Episode 115: Danny Meyer: Hospitality and Humanity</h2>
+      <div class="podcast-name" dir="auto">The Knowledge Project</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> 2026-02-25 &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Danny Meyer</span><span>chef interview</span></p>
-  <p class="meta"><a href="https://fs.blog/knowledge-project-podcast/danny-meyer/">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://fs.blog/knowledge-project-podcast/danny-meyer/">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Palestinian Ingredients Through Time &amp; Space</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Matbakh | Food of the Arab World (afikra)</p>
-  <p class="meta"><strong>Release date:</strong> 2025-04-25</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">M</div>
+    <div>
+      <h2 dir="auto">Palestinian Ingredients Through Time &amp; Space</h2>
+      <div class="podcast-name" dir="auto">Matbakh | Food of the Arab World (afikra)</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> 2025-04-25 &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Cultural or historical food narrative + Levant region</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Levantine</span><span>Palestinian food</span><span>food anthropology</span></p>
-  <p class="meta"><a href="https://podcasts.apple.com/us/podcast/palestinian-ingredients-through-time-space-fadi-kattan/id1646402301">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://podcasts.apple.com/us/podcast/palestinian-ingredients-through-time-space-fadi-kattan/id1646402301">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Episode 1717: Avi Shemtov</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Simply Ming</p>
-  <p class="meta"><strong>Release date:</strong> 2022-02-05</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">S</div>
+    <div>
+      <h2 dir="auto">Episode 1717: Avi Shemtov</h2>
+      <div class="podcast-name" dir="auto">Simply Ming</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> 2022-02-05 &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Avi Shemtov</span><span>chef interview</span><span>hummus</span><span>street food</span></p>
-  <p class="meta"><a href="https://ming.com/simplyming/season-17/episode-1717-avi-shemtov/">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://ming.com/simplyming/season-17/episode-1717-avi-shemtov/">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Food Fight</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Israel Story (with The Kitchen Sisters)</p>
-  <p class="meta"><strong>Release date:</strong> 2021-10-25</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge high">High</span></p>
+<div class="card conf-high">
+  <div class="card-head">
+    <div class="avatar">I</div>
+    <div>
+      <h2 dir="auto">Food Fight</h2>
+      <div class="podcast-name" dir="auto">Israel Story (with The Kitchen Sisters)</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> 2021-10-25 &middot; <strong>Confidence:</strong> <span class="badge high">High</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Ingredient deep dive + Levantine origin; Cultural or historical food narrative + Levant region</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Erez Komarovsky</span><span>Levantine</span><span>diaspora cooking</span><span>food anthropology</span><span>hummus</span></p>
-  <p class="meta"><a href="https://www.israelstory.org/episode/food-fight/">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://www.israelstory.org/episode/food-fight/">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Ori Menashe &amp; Genevieve Gergis</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> This Is TASTE</p>
-  <p class="meta"><strong>Release date:</strong> 2019-02-22</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge high">High</span></p>
+<div class="card conf-high">
+  <div class="card-head">
+    <div class="avatar">T</div>
+    <div>
+      <h2 dir="auto">Ori Menashe &amp; Genevieve Gergis</h2>
+      <div class="podcast-name" dir="auto">This Is TASTE</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> 2019-02-22 &middot; <strong>Confidence:</strong> <span class="badge high">High</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine; Restaurant story + Israeli/Mizrahi/Levantine chef; Behind-the-scenes kitchen talk + relevant chef or dish keyword</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Genevieve Gergis</span><span>Ori Menashe</span><span>chef interview</span><span>menu development</span><span>restaurant kitchen</span></p>
-  <p class="meta"><a href="https://tastecooking.com/taste-podcast-44-ori-menashe-genevieve-gergis/">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://tastecooking.com/taste-podcast-44-ori-menashe-genevieve-gergis/">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Matbucha and Mishpucha: Life as an Israeli-American Chef with Michael Solomonov</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Wondering Jews with Mijal and Noam</p>
-  <p class="meta"><strong>Release date:</strong> Unknown</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">W</div>
+    <div>
+      <h2 dir="auto">Matbucha and Mishpucha: Life as an Israeli-American Chef with Michael Solomonov</h2>
+      <div class="podcast-name" dir="auto">Wondering Jews with Mijal and Noam</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> Unknown &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Michael Solomonov</span><span>chef interview</span></p>
-  <p class="meta"><a href="https://podcasts.apple.com/us/podcast/matbucha-and-mishpucha-life-as-an-israeli-american/id1727260478">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://podcasts.apple.com/us/podcast/matbucha-and-mishpucha-life-as-an-israeli-american/id1727260478">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Reem Assil of Reem&#x27;s California on Food, Community, and Social Justice</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Radio Cherry Bombe</p>
-  <p class="meta"><strong>Release date:</strong> Unknown</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge high">High</span></p>
+<div class="card conf-high">
+  <div class="card-head">
+    <div class="avatar">R</div>
+    <div>
+      <h2 dir="auto">Reem Assil of Reem&#x27;s California on Food, Community, and Social Justice</h2>
+      <div class="podcast-name" dir="auto">Radio Cherry Bombe</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> Unknown &middot; <strong>Confidence:</strong> <span class="badge high">High</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine; Restaurant story + Israeli/Mizrahi/Levantine chef; Behind-the-scenes kitchen talk + relevant chef or dish keyword</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Reem Assil</span><span>chef interview</span><span>kitchen culture</span><span>restaurant opening</span></p>
-  <p class="meta"><a href="https://cherrybombe.com/blogs/radio-cherry-bombe/reem-assil-of-reem-s-california-on-food-community-and-social-justice">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://cherrybombe.com/blogs/radio-cherry-bombe/reem-assil-of-reem-s-california-on-food-community-and-social-justice">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">The World of Sephardic Food</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Adventures in Jewish Studies (Association for Jewish Studies)</p>
-  <p class="meta"><strong>Release date:</strong> Unknown</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">A</div>
+    <div>
+      <h2 dir="auto">The World of Sephardic Food</h2>
+      <div class="podcast-name" dir="auto">Adventures in Jewish Studies (Association for Jewish Studies)</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> Unknown &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Cultural or historical food narrative + Levant region</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Mizrahi</span><span>food anthropology</span></p>
-  <p class="meta"><a href="https://www.associationforjewishstudies.org/podcasts/the-world-of-sephardic-food">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://www.associationforjewishstudies.org/podcasts/the-world-of-sephardic-food">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">Palestinian Home Cooking at Tanoreen with Rawia and Jumana Bishara</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> Heritage Radio Network: Food Without Borders</p>
-  <p class="meta"><strong>Release date:</strong> Unknown</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge high">High</span></p>
+<div class="card conf-high">
+  <div class="card-head">
+    <div class="avatar">H</div>
+    <div>
+      <h2 dir="auto">Palestinian Home Cooking at Tanoreen with Rawia and Jumana Bishara</h2>
+      <div class="podcast-name" dir="auto">Heritage Radio Network: Food Without Borders</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> Unknown &middot; <strong>Confidence:</strong> <span class="badge high">High</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Chef interview + Middle Eastern / Israeli cuisine; Cultural or historical food narrative + Levant region</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>Palestinian food</span><span>chef interview</span><span>diaspora cooking</span></p>
-  <p class="meta"><a href="https://heritageradionetwork.org/episode/palestinian-home-cooking-at-tanoreen-with-rawia-and-jumana-bashara/">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://heritageradionetwork.org/episode/palestinian-home-cooking-at-tanoreen-with-rawia-and-jumana-bashara/">Listen / show notes &rarr;</a></p>
 </div>
 
-<div class="card">
-  <h2 dir="auto">מה הופך את המטבח הישראלי לישראלי</h2>
-  <p class="meta" dir="auto"><strong>Podcast:</strong> מקורב לצלחת (Dishing Out)</p>
-  <p class="meta"><strong>Release date:</strong> Unknown</p>
-  <p class="meta"><strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
+<div class="card conf-medium">
+  <div class="card-head">
+    <div class="avatar">מ</div>
+    <div>
+      <h2 dir="auto">מה הופך את המטבח הישראלי לישראלי</h2>
+      <div class="podcast-name" dir="auto">מקורב לצלחת (Dishing Out)</div>
+    </div>
+  </div>
+  <p class="meta"><strong>Release date:</strong> Unknown &middot; <strong>Confidence:</strong> <span class="badge medium">Medium</span></p>
   <p class="meta" dir="auto"><strong>Reason:</strong> Cultural or historical food narrative + Levant region</p>
   <p class="meta keywords" dir="auto"><strong>Matched keywords:</strong><br><span>אנתרופולוגיה קולינרית</span><span>המטבח הישראלי</span></p>
-  <p class="meta"><a href="https://podcasts.apple.com/us/podcast/%D7%9E%D7%94-%D7%94%D7%95%D7%A4%D7%9A-%D7%90%D7%AA-%D7%94%D7%9E%D7%98%D7%91%D7%97-%D7%94%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99-%D7%9C%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99/id1768741829?i=1000706207608">Listen / show notes &rarr;</a></p>
+  <p class="meta listen-link"><a href="https://podcasts.apple.com/us/podcast/%D7%9E%D7%94-%D7%94%D7%95%D7%A4%D7%9A-%D7%90%D7%AA-%D7%94%D7%9E%D7%98%D7%91%D7%97-%D7%94%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99-%D7%9C%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99/id1768741829?i=1000706207608">Listen / show notes &rarr;</a></p>
 </div>
 
 <footer>
   <p>Seeded from a manual web-research pass (dates marked “Unknown” couldn&#x27;t be confirmed from search results). Eli already listens to every episode of לשבת לקחת, מדברים מהבטן, and מאחורי הצלחת עם גדי חן, so this page never flags their own episodes -- but their guest lists (Hebrew names included) are tracked, so any of those chefs showing up as an interviewee on another podcast will still flag, like the Erez Komarovsky / Israel Story example below. Also includes interviews with Will Guidara and Danny Meyer regardless of cuisine. Once podcasts.yaml has live feed URLs, the weekly GitHub Actions scan replaces this page with real RSS results. Also excludes shows Eli already subscribes to elsewhere (Sam Harris, Rhonda Patrick, Bill Maher, Pivot, This Is TASTE, Think &amp; Drink Different, Absolutely Mental, and others) -- see podcasts.yaml for the full list.</p>
-  Generated by the <a href="https://github.com/elipstein/Eli_Podcast_Monitor">Eli_Podcast_Monitor</a> scan.
-  Source lists and matching rules live in <code>podcast_monitor/keywords.py</code>.
+  <p>Generated by the <a href="https://github.com/elipstein/Eli_Podcast_Monitor">Eli_Podcast_Monitor</a> scan.</p>
 </footer>
 </body>
 </html>

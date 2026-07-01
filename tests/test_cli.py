@@ -34,7 +34,7 @@ def test_report_formats_render_without_error():
     html = to_html(flagged)
     assert "<html" in html
     assert "Michael Solomonov" in html
-    assert html.count('class="card"') == 4
+    assert html.count('class="card ') == 4
 
 
 def test_sorting_handles_episodes_with_missing_publish_date():

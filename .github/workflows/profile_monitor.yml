@@ -1,0 +1,80 @@
+name: Taste-Profile Monitor
+
+# LLM-judged pipeline for Eli's broader listening profile (profile_podcasts.yaml
+# + PROFILE.md) -- separate from the keyword-rule Podcast Monitor workflow,
+# since matching here is Claude's judgment call, not a fixed rule set.
+#
+# Requires an ANTHROPIC_API_KEY repo secret (Settings -> Secrets and
+# variables -> Actions) -- this workflow cannot run without it.
+
+on:
+  schedule:
+    # Every Monday at 13:15 UTC (offset from the cuisine monitor)
+    - cron: "15 13 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check for ANTHROPIC_API_KEY
+        id: check_key
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "::warning::ANTHROPIC_API_KEY secret is not set -- skipping this run. Add it under Settings > Secrets and variables > Actions."
+            echo "has_key=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_key=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run profile monitor
+        if: steps.check_key.outputs.has_key == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          mkdir -p reports docs
+          python -m podcast_monitor.profile_cli \
+            --config profile_podcasts.yaml \
+            --days 14 \
+            --format markdown \
+            --output "reports/profile-$(date -u +%Y-%m-%d).md"
+          python -m podcast_monitor.profile_cli \
+            --config profile_podcasts.yaml \
+            --days 60 \
+            --format html \
+            --output docs/profile.html
+
+      - name: Commit report
+        if: steps.check_key.outputs.has_key == 'true'
+        run: |
+          git config user.name "podcast-monitor-bot"
+          git config user.email "actions@github.com"
+          git add reports/ docs/
+          git diff --cached --quiet || git commit -m "Weekly taste-profile scan report"
+          git push
+
+      - name: Open issue if episodes were flagged
+        if: steps.check_key.outputs.has_key == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPORT="reports/profile-$(date -u +%Y-%m-%d).md"
+          if ! grep -q "^No episodes matched" "$REPORT"; then
+            gh issue create \
+              --title "Taste-profile scan: flagged episodes for $(date -u +%Y-%m-%d)" \
+              --body-file "$REPORT" \
+              --label "podcast-scan"
+          fi
