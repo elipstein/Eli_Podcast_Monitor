@@ -142,6 +142,19 @@ def test_achorei_hatzlachat_guest_flags_on_any_podcast():
     assert "רז רהב" in {m.text for m in result.matched_keywords}
 
 
+def test_bernardo_blachowitz_guest_flags_on_any_podcast():
+    # Bernardo isn't a "chef" (he's a cafe owner), so the more natural
+    # trigger for him is the restaurant-story rule rather than the
+    # chef-interview one.
+    result = evaluate(
+        "ברנרדו בלחוביץ' על פתיחת מסעדה חדשה",
+        "שיחה עם ברנרדו בלחוביץ' על קפה גן סיפור והדרך שעבר בעולם המסעדנות.",
+    )
+    assert result.flagged
+    assert "restaurant_story_regional_chef" in result.fired_rules
+    assert "ברנרדו בלחוביץ'" in {m.text for m in result.matched_keywords}
+
+
 def test_hebrew_unrelated_episode_not_flagged():
     result = evaluate(
         "פרק 91: פנינו לאן?",
