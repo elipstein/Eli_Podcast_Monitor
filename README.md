@@ -24,6 +24,13 @@ cuisine/ingredient match backs a single rule, and `Low` otherwise.
 Edit `podcast_monitor/keywords.py` to add chefs, ingredients, or
 signal phrases as you discover more.
 
+`OTHER_FAVORITE_CHEFS` in `keywords.py` holds people Eli wants flagged
+in a chef-interview context regardless of region/cuisine: Will
+Guidara, Danny Meyer, Michael Solomonov, and (found while researching
+Eli's "Think & Drink Different") Jeremy Fogel and chef Asaf Doktor,
+who co-host כאן's culinary-history documentary on the ancient
+Levantine/Israelite diet.
+
 ### Hebrew support
 
 Every keyword concept (chef names, cuisine terms, ingredients, signal
@@ -60,10 +67,18 @@ https://rss.com/tools/find-my-feed/ before they'll be scanned.
 **Deliberately not in this list:** לשבת לקחת, מדברים מהבטן, and
 מאחורי הצלחת עם גדי חן. Eli listens to every episode of all three
 already, so flagging their own episodes would be noise — only their
-guest lists (above) feed the matcher. Three shows discovered via web
-search *as similar to those three* — אנזל ולוקסי, Yuvi Yam | קולינריה
-בישראל, and אוכל ישראל עם גיל חובב — were added to the monitored list
+guest lists (above) feed the matcher. Four shows discovered via web
+search — אנזל ולוקסי, Yuvi Yam | קולינריה בישראל, אוכל ישראל עם גיל
+חובב, and מקורב לצלחת (Dishing Out) — were added to the monitored list
 instead, since Eli doesn't already listen to those.
+
+Also **not monitored, and never to be re-suggested**: general-interest
+shows Eli already subscribes to that mostly fall outside this
+project's scope entirely (Sam Harris, Rhonda Patrick, Bill Maher,
+Pivot, השבוע - פודקאסט הארץ, The Moth, This Is TASTE, And Here's Modi,
+The Daily Churn, Think & Drink Different, Absolutely Mental) — see the
+comment block at the top of `podcasts.yaml` for the full list and
+reasoning.
 
 ## Usage
 

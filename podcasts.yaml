@@ -22,6 +22,20 @@
 # LASHEVET_LAKACHAT_GUESTS and ACHOREI_HATZLACHAT_GUESTS. Any of those
 # guests showing up as an interviewee on one of the podcasts actually
 # listed below (or any future one) will still flag.
+#
+# ALSO not monitored, and not to be re-suggested as "similar podcast"
+# discoveries later -- shows Eli already subscribes to, mostly outside
+# this project's Middle Eastern/chef scope entirely: Sam Harris (Making
+# Sense), Rhonda Patrick (FoundMyFitness), Bill Maher (Real Time / Club
+# Random), Pivot, השבוע - פודקאסט הארץ, The Moth, This Is TASTE, And
+# Here's Modi, The Daily Churn, Think & Drink Different (host Jeremy
+# Fogel), and Absolutely Mental with Ricky Gervais. Two people from
+# researching Think & Drink Different -- Jeremy Fogel himself, and chef
+# Asaf Doktor, his co-host on כאן's culinary-history documentary
+# "הצלחת של הארץ המובטחת" -- were added to OTHER_FAVORITE_CHEFS in
+# keywords.py since that show's subject (the ancient Levantine/Israelite
+# diet) is squarely on-topic. Researching that documentary also
+# surfaced מקורב לצלחת (Dishing Out), added below.
 
 podcasts:
   - name: "Israel Story"
@@ -81,3 +95,10 @@ podcasts:
     feed_url: null  # TODO: resolve RSS feed
     apple_podcasts_url: "https://podcasts.apple.com/ca/podcast/%D7%90%D7%95%D7%9B%D7%9C-%D7%99%D7%A9%D7%A8%D7%90%D7%9C-%D7%A2%D7%9D-%D7%92%D7%99%D7%9C-%D7%97%D7%95%D7%91%D7%91-ochel-israel-with-gil-hovav/id1470358302"
     note: "Gil Hovav's Hebrew podcast: top Israeli restaurant recommendations, seasonal recipes, and culinary tips."
+
+  # Found while researching Jeremy Fogel / Think & Drink Different --
+  # squarely on-topic (Israeli food anthropology / cultural history).
+  - name: "מקורב לצלחת (Dishing Out)"
+    feed_url: null  # TODO: resolve RSS feed
+    apple_podcasts_url: "https://podcasts.apple.com/us/podcast/%D7%9E%D7%A7%D7%95%D7%A8%D7%91-%D7%9C%D7%A6%D7%9C%D7%97%D7%AA-dishing-out/id1768741829"
+    note: "Kan (כאן) show hosted by Shaul Amsterdamski: markets, kitchens, fields, and labs, trying to understand why Israelis eat what they eat. Episode topics include ואדי ניסנאס (Wadi Nisnas), שוק הכרמל (Carmel Market), and \"what makes Israeli cuisine Israeli.\""

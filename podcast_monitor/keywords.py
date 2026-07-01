@@ -93,6 +93,11 @@ ACHOREI_HATZLACHAT_GUESTS = [
 OTHER_FAVORITE_CHEFS = [
     "Will Guidara",
     "Danny Meyer",
+    "ג'רמי פוגל",   # Jeremy Fogel -- not a chef, but Eli's favorite host of
+                    # Think & Drink Different; co-hosts כאן's culinary-history
+                    # documentary "הצלחת של הארץ המובטחת" with chef Asaf Doktor
+    "אסף דוקטור",   # Asaf Doktor -- chef, co-host of the same show, directly
+                    # on-topic (ancient Levantine/Israelite diet history)
 ]
 
 CHEF_NAMES = _flatten(CHEF_NAMES, LASHEVET_LAKACHAT_GUESTS, ACHOREI_HATZLACHAT_GUESTS, OTHER_FAVORITE_CHEFS)
