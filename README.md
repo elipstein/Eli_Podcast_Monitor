@@ -4,6 +4,11 @@ Scans podcast RSS feeds for episodes about Middle Eastern / Israeli
 cuisine, chef interviews, and behind-the-scenes kitchen/restaurant
 stories, and flags the ones that match.
 
+See [`PROFILE.md`](PROFILE.md) for the broader picture: everything
+Eli's said he subscribes to (not just food shows), what that implies
+about his taste, and podcast/episode recommendations that go beyond
+the strict Middle-Eastern-cuisine rule engine below.
+
 ## How flagging works
 
 `podcast_monitor/keywords.py` holds four keyword categories (chef
