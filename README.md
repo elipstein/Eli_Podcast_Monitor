@@ -58,6 +58,26 @@ issue listing flagged episodes. It runs on a GitHub-hosted runner with
 normal internet access, so it can reach podcast RSS hosts that this
 dev sandbox could not.
 
+## Website
+
+`docs/index.html` is a static HTML report (built with `--format html`)
+meant to be served by GitHub Pages at
+**https://elipstein.github.io/Eli_Podcast_Monitor/**. It currently
+holds a manually-researched snapshot of matching episodes (dates
+marked "Unknown" couldn't be confirmed) — the weekly scan will replace
+it with live RSS results once `podcasts.yaml` has real feed URLs.
+
+**One-time setup (do this in the GitHub UI, not something this repo
+can do on its own):** go to the repo's **Settings → Pages**, and under
+"Build and deployment" set **Source: GitHub Actions**. After that,
+`.github/workflows/pages.yml` deploys `docs/` automatically on every
+push and the site goes live at the URL above within a minute or two.
+Regenerate the page locally with:
+
+```bash
+python -m podcast_monitor.cli --config podcasts.yaml --days 60 --format html --output docs/index.html
+```
+
 ## Tests
 
 ```bash

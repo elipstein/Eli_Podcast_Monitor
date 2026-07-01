@@ -25,18 +25,23 @@ jobs:
 
       - name: Run monitor
         run: |
-          mkdir -p reports
+          mkdir -p reports docs
           python -m podcast_monitor.cli \
             --config podcasts.yaml \
             --days 14 \
             --format markdown \
             --output "reports/$(date -u +%Y-%m-%d).md"
+          python -m podcast_monitor.cli \
+            --config podcasts.yaml \
+            --days 60 \
+            --format html \
+            --output docs/index.html
 
       - name: Commit report
         run: |
           git config user.name "podcast-monitor-bot"
           git config user.email "actions@github.com"
-          git add reports/
+          git add reports/ docs/
           git diff --cached --quiet || git commit -m "Weekly podcast scan report"
           git push
 
