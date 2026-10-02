@@ -9,6 +9,10 @@ Eli's said he subscribes to (not just food shows), what that implies
 about his taste, and podcast/episode recommendations that go beyond
 the strict Middle-Eastern-cuisine rule engine below.
 
+**There's no automated scanning anymore.** See [`ROUTINE.md`](ROUTINE.md)
+for the manual routine to run in a Claude Code session instead — it
+replaced the three GitHub Actions workflows this repo used to have.
+
 ## How flagging works
 
 `podcast_monitor/keywords.py` holds four keyword categories (chef
@@ -63,38 +67,38 @@ patterns) to grow the lists automatically.
 
 ## Taste-profile pipeline (LLM judgment, not keywords)
 
-`podcast_monitor/profile_cli.py` is a second, separate pipeline for
-everything in [`PROFILE.md`](PROFILE.md) that isn't Middle Eastern
-cuisine — general shows Eli's taste implies he'd like. There's no
-keyword combination that captures "would Eli like this episode of
-Acquired," so instead of `matcher.py`'s fixed rules, `profile_judge.py`
-sends each episode's title + description to Claude (`claude-opus-4-8`)
-alongside the full text of `PROFILE.md` and asks for a structured
-verdict — `fits: bool`, `confidence`, `reasoning` — via
-`client.messages.parse(..., output_format=EpisodeJudgment)` (a Pydantic
-model). It's deliberately selective: most episodes of a show Eli
+Everything in [`PROFILE.md`](PROFILE.md) that isn't Middle Eastern
+cuisine — general shows Eli's taste implies he'd like — gets a second,
+separate matching approach. There's no keyword combination that
+captures "would Eli like this episode of Acquired," so instead of
+`matcher.py`'s fixed rules, each episode gets judged against the full
+text of `PROFILE.md` in free text: `fits: bool`, `confidence`,
+`reasoning`. It's deliberately selective — most episodes of a show Eli
 already likes still shouldn't be flagged, only the unusually good,
 timely, or distinctive ones.
+
+**The default way to run this is [`ROUTINE.md`](ROUTINE.md) Step 2**:
+`profile_fetch.py` fetches candidate episodes as plain JSON, a Claude
+Code session reads `PROFILE.md` and judges each one inline (no API
+call, no `ANTHROPIC_API_KEY` needed), and `profile_report.py` renders
+the judged results. This is what replaced the old
+`profile_monitor.yml` GitHub Actions workflow.
+
+There's also a **scripted, fully-automated alternative** —
+`profile_judge.py` / `profile_cli.py` — that calls the Claude API
+directly via `client.messages.parse(..., output_format=EpisodeJudgment)`
+(a Pydantic model, model `claude-opus-4-8`) instead of relying on an
+in-session Claude to judge. It's unused by the current routine but
+kept in case Eli wants real unattended automation again later (e.g. a
+re-added GitHub Actions workflow) — that path needs an
+`ANTHROPIC_API_KEY`, which this dev sandbox never had, so only its
+surrounding logic (config loading, date filtering, report rendering)
+is verified, via a mocked Anthropic client (`tests/test_profile.py`).
 
 `profile_podcasts.yaml` is the starter show list, one per theme from
 `PROFILE.md`'s recommendations (Huberman Lab, The Prof G Pod, This
 American Life, Wondering Jews with Mijal and Noam) — add more from
 `PROFILE.md` or elsewhere.
-
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-python -m podcast_monitor.profile_cli --config profile_podcasts.yaml --days 14
-```
-
-**This requires an `ANTHROPIC_API_KEY`, which this dev sandbox does not
-have** — the pipeline's surrounding logic (config loading, date
-filtering, report rendering) is unit-tested with a mocked Anthropic
-client (`tests/test_profile.py`), but the actual API call has not been
-exercised against the live API from this session. For the automated
-version, add `ANTHROPIC_API_KEY` as a repo secret (**Settings → Secrets
-and variables → Actions**) — `.github/workflows/profile_monitor.yml`
-checks for it and skips with a warning if it's missing, otherwise runs
-weekly and updates `docs/profile.html`.
 
 ## Podcasts monitored
 
@@ -140,20 +144,11 @@ release date, matched keywords, reason for flag, confidence level.
 
 ## Automated weekly scans
 
-Two independent GitHub Actions workflows, offset by 15 minutes so they
-don't race on `docs/`:
-
-- `.github/workflows/monitor.yml` — the cuisine keyword-rule scan.
-  Runs every Monday 13:00 UTC (and on manual dispatch), commits the
-  report to `reports/`, updates `docs/index.html`, and opens a GitHub
-  issue listing flagged episodes.
-- `.github/workflows/profile_monitor.yml` — the taste-profile LLM scan.
-  Runs every Monday 13:15 UTC, same behavior, updates `docs/profile.html`.
-  Requires the `ANTHROPIC_API_KEY` repo secret (see above) — skips with
-  a warning if it's not set.
-
-Both run on GitHub-hosted runners with normal internet access, so they
-can reach podcast RSS hosts that this dev sandbox could not.
+There aren't any anymore — this used to run via two GitHub Actions
+workflows (`monitor.yml`, `profile_monitor.yml`) plus a `pages.yml`
+deploy workflow, all deleted. See [`ROUTINE.md`](ROUTINE.md) for the
+manual replacement and why it isn't (and can't safely be) turned back
+into unattended automation from inside a Claude session.
 
 ## Website
 
@@ -163,20 +158,23 @@ bar, meant to be served by GitHub Pages at
 **https://elipstein.github.io/Eli_Podcast_Monitor/**. `index.html`
 currently holds a manually-researched snapshot of matching episodes
 (dates marked "Unknown" couldn't be confirmed); `profile.html` is an
-honest empty placeholder, since generating it for real requires the
-`ANTHROPIC_API_KEY` this sandbox doesn't have. The weekly scans replace
-both with live results once feeds and the API key are in place.
+honest empty placeholder, since generating it for real means running
+[`ROUTINE.md`](ROUTINE.md) Step 2. Re-running the routine replaces both
+with current results.
 
 **One-time setup (do this in the GitHub UI, not something this repo
 can do on its own):** go to the repo's **Settings → Pages**, and under
-"Build and deployment" set **Source: GitHub Actions**. After that,
-`.github/workflows/pages.yml` deploys `docs/` automatically on every
-push and the site goes live at the URL above within a minute or two.
+"Build and deployment" set **Source: Deploy from a branch**, branch =
+this repo's working branch, folder = **/docs**. (This is different from
+when `pages.yml` existed, which needed Source set to "GitHub Actions"
+instead — now that there's no deploy workflow, Pages needs to serve
+`docs/` directly from the branch.) After that, the site goes live at
+the URL above within a minute or two of any push that touches `docs/`.
 Regenerate the pages locally with:
 
 ```bash
 python -m podcast_monitor.cli --config podcasts.yaml --days 60 --format html --output docs/index.html
-python -m podcast_monitor.profile_cli --config profile_podcasts.yaml --days 60 --format html --output docs/profile.html
+# docs/profile.html: see ROUTINE.md Step 2 (requires judging episodes inline, not a single command)
 ```
 
 ## Tests
@@ -188,8 +186,10 @@ pytest
 
 Tests run entirely offline against a local RSS fixture
 (`tests/fixtures/sample_feed.xml`) — no network required. The
-taste-profile pipeline's tests mock the Anthropic client
-(`tests/test_profile.py`), so they don't need `ANTHROPIC_API_KEY` either.
+scripted `profile_cli.py`/`profile_judge.py` alternative's tests mock
+the Anthropic client (`tests/test_profile.py`); the default
+`profile_fetch.py`/`profile_report.py` routine needs no mocking at all
+since it never calls an LLM itself (`tests/test_profile_routine.py`).
 
 ## Known limitations
 
@@ -199,12 +199,14 @@ github, anthropic) and does not include podcast hosting CDNs
 (Megaphone, Acast, Omny, etc.). The matching engine and CLI are fully
 tested against local fixtures, but no live feed in `podcasts.yaml` or
 `profile_podcasts.yaml` was fetch-verified from this session — do that
-once from an unrestricted network (your machine, or the GitHub Actions
-workflow) before trusting the configured `feed_url` values.
+once from an unrestricted network (your machine, or whenever
+[`ROUTINE.md`](ROUTINE.md) is run) before trusting the configured
+`feed_url` values.
 
 Separately, this session has no `ANTHROPIC_API_KEY`, so
-`profile_cli.py`'s actual call to Claude has never run for real —
-only its surrounding logic, via a mocked client. Run it once with a
-real key (locally, or via the `profile_monitor.yml` workflow once the
-secret is added) to confirm the live behavior matches what the tests
-predict.
+`profile_cli.py`/`profile_judge.py`'s actual call to Claude has never
+run for real — only its surrounding logic, via a mocked client. That
+path is optional now (see "Taste-profile pipeline" above) since the
+default routine judges episodes in-session instead, but if it's ever
+revived, run it once with a real key to confirm the live behavior
+matches what the tests predict.
